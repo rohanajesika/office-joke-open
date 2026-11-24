@@ -1,0 +1,44 @@
+CHECKS — office-joke-open (u-aldy998-make-the-ai-judge-laugh-the-office-joke-open-9920f232)
+Built 2026-11-24 ~17:40 WIB, build session agent ac646abc-3054-481a-a69d-e41a1ea3e2cb.
+Classification verified from requirements API: BUNDLE (transcripts_witnessed applies: False).
+Entry line (106 chars, 106 bytes, 20 words, no trailing newline):
+  "I told my calendar I need focus time, so it booked me a meeting titled 'Focus Time' with twelve attendees."
+
+v1 tests (before revision):
+- Node 24 local run: exit 0, entry.txt md5 e7921e44e8953ea87d190a387f5ae4f1, 106 bytes.
+- Node 22.21.1 (~/workspace/makefun/_tools/node22/bin/node): exit 0, md5 identical.
+- Determinism: 3 consecutive Node 22.21.1 runs, md5 identical every time.
+
+v2 (real revision: added office-anchor validation — line must name at least one
+specific office detail: calendar/meeting/email/printer/reply-all/focus time/
+standup/inbox/out-of-office/spreadsheet):
+- Node 22.21.1 run: exit 0, entry.txt md5 e7921e44e8953ea87d190a387f5ae4f1 (byte-identical to v1).
+- Gate 1-200 chars: PASS (106). Single line, no newline: PASS. Ends with terminal
+  punctuation: PASS. No leading/trailing whitespace: PASS. Office anchor present
+  ("calendar", "meeting", "focus time"): PASS.
+- Negative tests (copies outside the repo, Node 22.21.1):
+  * newline smuggled into the line -> exit 1 ("line must not contain control characters").
+  * trailing space -> exit 1 ("line must end with terminal punctuation").
+  * 222-character line -> exit 1 ("line is 222 characters, must be 1-200").
+
+Grader simulation (binary Node 22.21.1, /dev/shm copy):
+- Entry copy in read-only folder, run as user 65534 (nobody) from cwd /, no network
+  (unshare -n), MAKEFUN_OUTPUT_DIR to an empty writable dir, 60 s budget:
+  exit 0 in 0.15 s, output byte-identical (md5 e7921e44e8953ea87d190a387f5ae4f1).
+- Stale file in the output dir survived untouched: program writes entry.txt only
+  and never deletes /output or its contents.
+- Note: the Node binary at /tmp could not be executed by nobody (permission
+  denied), so the sim used a copy in /dev/shm; the entry copy needed a+rX
+  permissions for nobody to read it. Not an entry problem — the grader runs
+  its own Node.
+
+Quality review vs judge brief (most important first):
+1. Office life, works as a joke — calendar / focus time / meeting / attendees.
+2. Earned laugh, payoff in last words — the calendar "helps" by doing the exact
+   opposite; "with twelve attendees" lands last against a meeting titled
+   'Focus Time'.
+3. Specific detail — a meeting titled 'Focus Time', twelve attendees.
+4. Fresh — the calendar as a literal-minded assistant, not the standard
+   meeting-that-could-have-been-an-email joke (weighed and rejected as stale).
+5. One clean pass, 106 chars, every word earns its place.
+No fetch, no randomness, no clock — deterministic. All text original.
